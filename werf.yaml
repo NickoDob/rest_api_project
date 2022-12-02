@@ -1,0 +1,8 @@
+project: restapi-training-project
+configVersion: 1
+deploy:
+  helmRelease: restapi-training-project
+  namespace: py-dev
+---
+image: restapi-training-project
+dockerfile: ./Dockerfile

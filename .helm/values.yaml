@@ -1,0 +1,30 @@
+envs:
+  WEB_PORT:  # порт используется для healthcheck
+    _default: 8006
+  WSDL_LINK:
+    _default: "None"
+  SERVICE_NAME:
+    _default: "restapi-training-project"
+  JSON_LOGS:
+    _default: True
+  LOGGING_LEVEL:
+    _default: "DEBUG"
+  ENV:
+    _default: "staging"
+domain:
+  _default: "None"
+
+vault:
+  role:
+    _default: "None"
+  path:
+    _default: "None"
+
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi

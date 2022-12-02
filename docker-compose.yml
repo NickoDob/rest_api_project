@@ -1,0 +1,6 @@
+services:
+   app:
+     image: {{ index .Values.werf.image .Release.Name }}
+     container_name: {{ .Release.Name }}
+     ports:
+       - 8006:8006

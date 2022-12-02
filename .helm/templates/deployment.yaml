@@ -1,0 +1,40 @@
+{{- $vp := pluck $.Values.global.env .Values.vault.path | first | default .Values.vault.path._default }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      imagePullSecrets:
+        - name: "registrysecret"
+      containers:
+      - name: {{ .Release.Name }}
+        image: {{ index .Values.werf.image .Release.Name }}
+        env:
+            {{- range $name, $value := .Values.envs }}
+            - name: {{ $name }}
+              value: {{ pluck $.Values.global.env $value | first | default $value._default | quote }}
+            {{- end }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{pluck $.Values.global.env .Values.envs.WEB_PORT | first | default .Values.envs.WEB_PORT._default}}
+            scheme: HTTP
+          initialDelaySeconds: 20
+        resources:
+            {{- with .Values.resources }}
+        resources:
+{{ toYaml . | indent 10 }}
+            {{- end }}
